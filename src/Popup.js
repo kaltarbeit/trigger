@@ -142,7 +142,7 @@ class Popup extends Component {
       align, visible,
       prefixCls, style, getClassNameFromAlign,
       destroyPopupOnHide, stretch, children,
-      onMouseEnter, onMouseLeave, onMouseDown, onTouchStart, onFocus, onBlur
+      onMouseEnter, onMouseLeave, onMouseDown, onTouchStart, onFocus, onBlur,
     } = this.props;
     const className = this.getClassName(this.currentAlignClassName ||
       getClassNameFromAlign(align));

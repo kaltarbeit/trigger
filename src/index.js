@@ -449,8 +449,9 @@ class Trigger extends React.Component {
     if (this.isFocusToShow()) {
       focusProps.onFocus = this.onPopupFocus;
     }
-    if(this.isBlurToHide)
+    if (this.isBlurToHide) {
       focusProps.onBlur = this.onPopupBlur;
+    }
 
     return (
       <Popup
