@@ -250,6 +250,33 @@ class Trigger extends React.Component {
     }
   };
 
+  onBlur = e => {
+    this.fireEvents('onBlur', e);
+    this.clearDelayTimer();
+    if (this.isBlurToHide()) {
+      this.delaySetPopupVisible(false, this.props.blurDelay);
+    }
+  };
+
+  onPopupFocus = () => {
+    this.clearDelayTimer();
+  };
+
+  onPopupBlur = e => {
+    // https://github.com/react-component/trigger/pull/13
+    // react bug?
+    if (
+      e.relatedTarget &&
+      !e.relatedTarget.setTimeout &&
+      this._component &&
+      this._component.getPopupDomNode &&
+      contains(this._component.getPopupDomNode(), e.relatedTarget)
+    ) {
+      return;
+    }
+    this.delaySetPopupVisible(false, this.props.blurDelay);
+  };
+
   onMouseDown = e => {
     this.fireEvents('onMouseDown', e);
     this.preClickTime = Date.now();
@@ -258,14 +285,6 @@ class Trigger extends React.Component {
   onTouchStart = e => {
     this.fireEvents('onTouchStart', e);
     this.preTouchTime = Date.now();
-  };
-
-  onBlur = e => {
-    this.fireEvents('onBlur', e);
-    this.clearDelayTimer();
-    if (this.isBlurToHide()) {
-      this.delaySetPopupVisible(false, this.props.blurDelay);
-    }
   };
 
   onContextMenu = e => {
@@ -426,6 +445,13 @@ class Trigger extends React.Component {
     mouseProps.onMouseDown = this.onPopupMouseDown;
     mouseProps.onTouchStart = this.onPopupMouseDown;
 
+    const focusProps = {};
+    if (this.isFocusToShow()) {
+      focusProps.onFocus = this.onPopupFocus;
+    }
+    if(this.isBlurToHide)
+      focusProps.onBlur = this.onPopupBlur;
+
     return (
       <Popup
         prefixCls={prefixCls}
@@ -439,6 +465,7 @@ class Trigger extends React.Component {
         animation={popupAnimation}
         getClassNameFromAlign={this.getPopupClassNameFromAlign}
         {...mouseProps}
+        {...focusProps}
         stretch={stretch}
         getRootDomNode={this.getRootDomNode}
         style={popupStyle}
