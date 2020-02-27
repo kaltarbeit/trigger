@@ -241,6 +241,7 @@ export default class Trigger extends React.Component {
   }
 
   onFocus = (e) => {
+    console.log('onFocus');
     this.fireEvents('onFocus', e);
     // incase focusin and focusout
     this.clearDelayTimer();
@@ -261,6 +262,7 @@ export default class Trigger extends React.Component {
   }
 
   onBlur = (e) => {
+    console.log('onBlur');
     this.fireEvents('onBlur', e);
     this.clearDelayTimer();
     if (this.isBlurToHide()) {
@@ -269,6 +271,7 @@ export default class Trigger extends React.Component {
   }
 
   onPopupFocus = () => {
+    console.log('onPopupFocus');
     this.clearDelayTimer();
   };
 
@@ -284,6 +287,8 @@ export default class Trigger extends React.Component {
     ) {
       return;
     }
+    console.log('onPopupBlur');
+    this.clearDelayTimer();
     this.delaySetPopupVisible(false, this.props.blurDelay);
   };
 
