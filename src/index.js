@@ -418,6 +418,14 @@ export default class Trigger extends React.Component {
 
     mouseProps.onMouseDown = this.onPopupMouseDown;
 
+    const focusProps = {};
+    if (this.isFocusToShow()) {
+      focusProps.onFocus = this.onPopupFocus;
+    }
+    if (this.isBlurToHide) {
+      focusProps.onBlur = this.onPopupBlur;
+    }
+
     return (
       <Popup
         prefixCls={prefixCls}
