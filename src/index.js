@@ -268,6 +268,25 @@ export default class Trigger extends React.Component {
     }
   }
 
+  onPopupFocus = () => {
+    this.clearDelayTimer();
+  };
+
+  onPopupBlur = e => {
+    // https://github.com/react-component/trigger/pull/13
+    // react bug?
+    if (
+      e.relatedTarget &&
+      !e.relatedTarget.setTimeout &&
+      this._component &&
+      this._component.getPopupDomNode &&
+      contains(this._component.getPopupDomNode(), e.relatedTarget)
+    ) {
+      return;
+    }
+    this.delaySetPopupVisible(false, this.props.blurDelay);
+  };
+
   onContextMenu = (e) => {
     e.preventDefault();
     this.fireEvents('onContextMenu', e);
@@ -390,7 +409,14 @@ export default class Trigger extends React.Component {
     }
 
     mouseProps.onMouseDown = this.onPopupMouseDown;
-    mouseProps.onTouchStart = this.onPopupMouseDown;
+
+    const focusProps = {};
+    if (this.isFocusToShow()) {
+      focusProps.onFocus = this.onPopupFocus;
+    }
+    if (this.isBlurToHide) {
+      focusProps.onBlur = this.onPopupBlur;
+    }
 
     return (
       <Popup
@@ -405,6 +431,7 @@ export default class Trigger extends React.Component {
         animation={popupAnimation}
         getClassNameFromAlign={this.getPopupClassNameFromAlign}
         {...mouseProps}
+        {...focusProps}
         stretch={stretch}
         getRootDomNode={this.getRootDomNode}
         style={popupStyle}
