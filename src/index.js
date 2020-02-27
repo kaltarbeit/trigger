@@ -21,8 +21,16 @@ function returnDocument() {
   return window.document;
 }
 
-const ALL_HANDLERS = ['onClick', 'onMouseDown', 'onTouchStart', 'onMouseEnter',
-  'onMouseLeave', 'onFocus', 'onBlur', 'onContextMenu'];
+const ALL_HANDLERS = [
+  'onClick',
+  'onMouseDown',
+  'onTouchStart',
+  'onMouseEnter',
+  'onMouseLeave',
+  'onFocus',
+  'onBlur',
+  'onContextMenu',
+];
 
 const IS_REACT_16 = !!createPortal;
 
@@ -268,6 +276,25 @@ export default class Trigger extends React.Component {
     }
   }
 
+  onPopupFocus = () => {
+    this.clearDelayTimer();
+  };
+
+  onPopupBlur = e => {
+    // https://github.com/react-component/trigger/pull/13
+    // react bug?
+    if (
+      e.relatedTarget &&
+      !e.relatedTarget.setTimeout &&
+      this._component &&
+      this._component.getPopupDomNode &&
+      contains(this._component.getPopupDomNode(), e.relatedTarget)
+    ) {
+      return;
+    }
+    this.delaySetPopupVisible(false, this.props.blurDelay);
+  };
+
   onContextMenu = (e) => {
     e.preventDefault();
     this.fireEvents('onContextMenu', e);
@@ -404,6 +431,7 @@ export default class Trigger extends React.Component {
         animation={popupAnimation}
         getClassNameFromAlign={this.getPopupClassNameFromAlign}
         {...mouseProps}
+        {...focusProps}
         stretch={stretch}
         getRootDomNode={this.getRootDomNode}
         style={popupStyle}
