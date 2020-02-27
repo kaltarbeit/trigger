@@ -1496,7 +1496,7 @@ function contains(root, n) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = addEventListenerWrap;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_add_dom_event_listener__ = __webpack_require__(118);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_add_dom_event_listener__ = __webpack_require__(117);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_add_dom_event_listener___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_add_dom_event_listener__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
@@ -1553,7 +1553,7 @@ function saveRef(name, component) {
 /* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(127), __esModule: true };
+module.exports = { "default": __webpack_require__(126), __esModule: true };
 
 /***/ }),
 /* 61 */
@@ -1599,7 +1599,7 @@ var util = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties__ = __webpack_require__(140);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties__ = __webpack_require__(139);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__);
@@ -34305,16 +34305,14 @@ exports.unstable_unsubscribe = unstable_unsubscribe;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react_dom__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_react_lifecycles_compat__ = __webpack_require__(117);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rc_util_es_Dom_contains__ = __webpack_require__(57);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rc_util_es_Dom_addEventListener__ = __webpack_require__(58);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_rc_util_es_ContainerRender__ = __webpack_require__(121);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rc_util_es_Portal__ = __webpack_require__(122);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_classnames__ = __webpack_require__(123);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_classnames__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__utils__ = __webpack_require__(59);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__Popup__ = __webpack_require__(124);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rc_util_es_Dom_contains__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rc_util_es_Dom_addEventListener__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rc_util_es_ContainerRender__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_rc_util_es_Portal__ = __webpack_require__(121);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_classnames__ = __webpack_require__(122);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_classnames__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__utils__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__Popup__ = __webpack_require__(123);
 
 
 
@@ -34368,16 +34366,11 @@ var Trigger = function (_React$Component) {
       popupVisible = !!props.defaultPopupVisible;
     }
 
+    _this.prevPopupVisible = popupVisible;
+
     _this.state = {
-      prevPopupVisible: popupVisible,
       popupVisible: popupVisible
     };
-
-    ALL_HANDLERS.forEach(function (h) {
-      _this['fire' + h] = function (e) {
-        _this.fireEvents(h, e);
-      };
-    });
     return _this;
   }
 
@@ -34389,10 +34382,30 @@ var Trigger = function (_React$Component) {
     };
   };
 
+  Trigger.prototype.componentWillMount = function componentWillMount() {
+    var _this2 = this;
+
+    ALL_HANDLERS.forEach(function (h) {
+      _this2['fire' + h] = function (e) {
+        _this2.fireEvents(h, e);
+      };
+    });
+  };
+
   Trigger.prototype.componentDidMount = function componentDidMount() {
     this.componentDidUpdate({}, {
       popupVisible: this.state.popupVisible
     });
+  };
+
+  Trigger.prototype.componentWillReceiveProps = function componentWillReceiveProps(_ref) {
+    var popupVisible = _ref.popupVisible;
+
+    if (popupVisible !== undefined) {
+      this.setState({
+        popupVisible: popupVisible
+      });
+    }
   };
 
   Trigger.prototype.componentDidUpdate = function componentDidUpdate(_, prevState) {
@@ -34407,6 +34420,8 @@ var Trigger = function (_React$Component) {
       this.renderComponent(null, triggerAfterPopupVisibleChange);
     }
 
+    this.prevPopupVisible = prevState.popupVisible;
+
     // We must listen to `mousedown` or `touchstart`, edge case:
     // https://github.com/ant-design/ant-design/issues/5804
     // https://github.com/react-component/calendar/issues/250
@@ -34415,21 +34430,21 @@ var Trigger = function (_React$Component) {
       var currentDocument = void 0;
       if (!this.clickOutsideHandler && (this.isClickToHide() || this.isContextMenuToShow())) {
         currentDocument = props.getDocument();
-        this.clickOutsideHandler = Object(__WEBPACK_IMPORTED_MODULE_9_rc_util_es_Dom_addEventListener__["a" /* default */])(currentDocument, 'mousedown', this.onDocumentClick);
+        this.clickOutsideHandler = Object(__WEBPACK_IMPORTED_MODULE_8_rc_util_es_Dom_addEventListener__["a" /* default */])(currentDocument, 'mousedown', this.onDocumentClick);
       }
       // always hide on mobile
       if (!this.touchOutsideHandler) {
         currentDocument = currentDocument || props.getDocument();
-        this.touchOutsideHandler = Object(__WEBPACK_IMPORTED_MODULE_9_rc_util_es_Dom_addEventListener__["a" /* default */])(currentDocument, 'touchstart', this.onDocumentClick);
+        this.touchOutsideHandler = Object(__WEBPACK_IMPORTED_MODULE_8_rc_util_es_Dom_addEventListener__["a" /* default */])(currentDocument, 'touchstart', this.onDocumentClick);
       }
       // close popup when trigger type contains 'onContextMenu' and document is scrolling.
       if (!this.contextMenuOutsideHandler1 && this.isContextMenuToShow()) {
         currentDocument = currentDocument || props.getDocument();
-        this.contextMenuOutsideHandler1 = Object(__WEBPACK_IMPORTED_MODULE_9_rc_util_es_Dom_addEventListener__["a" /* default */])(currentDocument, 'scroll', this.onContextMenuClose);
+        this.contextMenuOutsideHandler1 = Object(__WEBPACK_IMPORTED_MODULE_8_rc_util_es_Dom_addEventListener__["a" /* default */])(currentDocument, 'scroll', this.onContextMenuClose);
       }
       // close popup when trigger type contains 'onContextMenu' and window is blur.
       if (!this.contextMenuOutsideHandler2 && this.isContextMenuToShow()) {
-        this.contextMenuOutsideHandler2 = Object(__WEBPACK_IMPORTED_MODULE_9_rc_util_es_Dom_addEventListener__["a" /* default */])(window, 'blur', this.onContextMenuClose);
+        this.contextMenuOutsideHandler2 = Object(__WEBPACK_IMPORTED_MODULE_8_rc_util_es_Dom_addEventListener__["a" /* default */])(window, 'blur', this.onContextMenuClose);
       }
       return;
     }
@@ -34441,19 +34456,6 @@ var Trigger = function (_React$Component) {
     this.clearDelayTimer();
     this.clearOutsideHandler();
     clearTimeout(this.mouseDownTimeout);
-  };
-
-  Trigger.getDerivedStateFromProps = function getDerivedStateFromProps(_ref, prevState) {
-    var popupVisible = _ref.popupVisible;
-
-    var newState = {};
-
-    if (popupVisible !== undefined && prevState.popupVisible !== popupVisible) {
-      newState.popupVisible = popupVisible;
-      newState.prevPopupVisible = prevState.popupVisible;
-    }
-
-    return newState;
   };
 
   Trigger.prototype.getPopupDomNode = function getPopupDomNode() {
@@ -34471,7 +34473,7 @@ var Trigger = function (_React$Component) {
         builtinPlacements = props.builtinPlacements;
 
     if (popupPlacement && builtinPlacements) {
-      return Object(__WEBPACK_IMPORTED_MODULE_13__utils__["a" /* getAlignFromPlacement */])(builtinPlacements, popupPlacement, popupAlign);
+      return Object(__WEBPACK_IMPORTED_MODULE_12__utils__["a" /* getAlignFromPlacement */])(builtinPlacements, popupPlacement, popupAlign);
     }
     return popupAlign;
   };
@@ -34482,14 +34484,13 @@ var Trigger = function (_React$Component) {
    */
   Trigger.prototype.setPopupVisible = function setPopupVisible(popupVisible, event) {
     var alignPoint = this.props.alignPoint;
-    var prevPopupVisible = this.state.popupVisible;
 
 
     this.clearDelayTimer();
 
-    if (prevPopupVisible !== popupVisible) {
+    if (this.state.popupVisible !== popupVisible) {
       if (!('popupVisible' in this.props)) {
-        this.setState({ popupVisible: popupVisible, prevPopupVisible: prevPopupVisible });
+        this.setState({ popupVisible: popupVisible });
       }
       this.props.onPopupVisibleChange(popupVisible);
     }
@@ -34501,15 +34502,15 @@ var Trigger = function (_React$Component) {
   };
 
   Trigger.prototype.delaySetPopupVisible = function delaySetPopupVisible(visible, delayS, event) {
-    var _this2 = this;
+    var _this3 = this;
 
     var delay = delayS * 1000;
     this.clearDelayTimer();
     if (delay) {
       var point = event ? { pageX: event.pageX, pageY: event.pageY } : null;
       this.delayTimer = setTimeout(function () {
-        _this2.setPopupVisible(visible, point);
-        _this2.clearDelayTimer();
+        _this3.setPopupVisible(visible, point);
+        _this3.clearDelayTimer();
       }, delay);
     } else {
       this.setPopupVisible(visible, event);
@@ -34632,7 +34633,7 @@ var Trigger = function (_React$Component) {
   };
 
   Trigger.prototype.render = function render() {
-    var _this3 = this;
+    var _this4 = this;
 
     var popupVisible = this.state.popupVisible;
     var _props8 = this.props,
@@ -34680,7 +34681,7 @@ var Trigger = function (_React$Component) {
       newChildProps.onBlur = this.createTwoChains('onBlur');
     }
 
-    var childrenClassName = __WEBPACK_IMPORTED_MODULE_12_classnames___default()(child && child.props && child.props.className, className);
+    var childrenClassName = __WEBPACK_IMPORTED_MODULE_11_classnames___default()(child && child.props && child.props.className, className);
     if (childrenClassName) {
       newChildProps.className = childrenClassName;
     }
@@ -34688,7 +34689,7 @@ var Trigger = function (_React$Component) {
 
     if (!IS_REACT_16) {
       return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_10_rc_util_es_ContainerRender__["a" /* default */],
+        __WEBPACK_IMPORTED_MODULE_9_rc_util_es_ContainerRender__["a" /* default */],
         {
           parent: this,
           visible: popupVisible,
@@ -34700,7 +34701,7 @@ var Trigger = function (_React$Component) {
         function (_ref2) {
           var renderComponent = _ref2.renderComponent;
 
-          _this3.renderComponent = renderComponent;
+          _this4.renderComponent = renderComponent;
           return trigger;
         }
       );
@@ -34710,8 +34711,12 @@ var Trigger = function (_React$Component) {
     // prevent unmounting after it's rendered
     if (popupVisible || this._component || forceRender) {
       portal = __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_11_rc_util_es_Portal__["a" /* default */],
-        { key: 'portal', getContainer: this.getContainer, didUpdate: this.handlePortalUpdate },
+        __WEBPACK_IMPORTED_MODULE_10_rc_util_es_Portal__["a" /* default */],
+        {
+          key: 'portal',
+          getContainer: this.getContainer,
+          didUpdate: this.handlePortalUpdate
+        },
         this.getComponent()
       );
     }
@@ -34785,132 +34790,128 @@ Trigger.defaultProps = {
 };
 
 var _initialiseProps = function _initialiseProps() {
-  var _this4 = this;
+  var _this5 = this;
 
   this.onMouseEnter = function (e) {
-    var mouseEnterDelay = _this4.props.mouseEnterDelay;
+    var mouseEnterDelay = _this5.props.mouseEnterDelay;
 
-    _this4.fireEvents('onMouseEnter', e);
-    _this4.delaySetPopupVisible(true, mouseEnterDelay, mouseEnterDelay ? null : e);
+    _this5.fireEvents('onMouseEnter', e);
+    _this5.delaySetPopupVisible(true, mouseEnterDelay, mouseEnterDelay ? null : e);
   };
 
   this.onMouseMove = function (e) {
-    _this4.fireEvents('onMouseMove', e);
-    _this4.setPoint(e);
+    _this5.fireEvents('onMouseMove', e);
+    _this5.setPoint(e);
   };
 
   this.onMouseLeave = function (e) {
-    _this4.fireEvents('onMouseLeave', e);
-    _this4.delaySetPopupVisible(false, _this4.props.mouseLeaveDelay);
+    _this5.fireEvents('onMouseLeave', e);
+    _this5.delaySetPopupVisible(false, _this5.props.mouseLeaveDelay);
   };
 
   this.onPopupMouseEnter = function () {
-    _this4.clearDelayTimer();
+    _this5.clearDelayTimer();
   };
 
   this.onPopupMouseLeave = function (e) {
     // https://github.com/react-component/trigger/pull/13
     // react bug?
-    if (e.relatedTarget && !e.relatedTarget.setTimeout && _this4._component && _this4._component.getPopupDomNode && Object(__WEBPACK_IMPORTED_MODULE_8_rc_util_es_Dom_contains__["a" /* default */])(_this4._component.getPopupDomNode(), e.relatedTarget)) {
+    if (e.relatedTarget && !e.relatedTarget.setTimeout && _this5._component && _this5._component.getPopupDomNode && Object(__WEBPACK_IMPORTED_MODULE_7_rc_util_es_Dom_contains__["a" /* default */])(_this5._component.getPopupDomNode(), e.relatedTarget)) {
       return;
     }
-    _this4.delaySetPopupVisible(false, _this4.props.mouseLeaveDelay);
+    _this5.delaySetPopupVisible(false, _this5.props.mouseLeaveDelay);
   };
 
   this.onFocus = function (e) {
-    _this4.fireEvents('onFocus', e);
+    _this5.fireEvents('onFocus', e);
     // incase focusin and focusout
-    _this4.clearDelayTimer();
-    if (_this4.isFocusToShow()) {
-      _this4.focusTime = Date.now();
-      _this4.delaySetPopupVisible(true, _this4.props.focusDelay);
+    _this5.clearDelayTimer();
+    if (_this5.isFocusToShow()) {
+      _this5.focusTime = Date.now();
+      _this5.delaySetPopupVisible(true, _this5.props.focusDelay);
     }
   };
 
+  this.onMouseDown = function (e) {
+    _this5.fireEvents('onMouseDown', e);
+    _this5.preClickTime = Date.now();
+  };
+
+  this.onTouchStart = function (e) {
+    _this5.fireEvents('onTouchStart', e);
+    _this5.preTouchTime = Date.now();
+  };
+
   this.onBlur = function (e) {
-    _this4.fireEvents('onBlur', e);
-    _this4.clearDelayTimer();
-    if (_this4.isBlurToHide()) {
-      _this4.delaySetPopupVisible(false, _this4.props.blurDelay);
+    _this5.fireEvents('onBlur', e);
+    _this5.clearDelayTimer();
+    if (_this5.isBlurToHide()) {
+      _this5.delaySetPopupVisible(false, _this5.props.blurDelay);
     }
   };
 
   this.onPopupFocus = function () {
-    _this4.clearDelayTimer();
+    _this5.clearDelayTimer();
   };
 
   this.onPopupBlur = function (e) {
     // https://github.com/react-component/trigger/pull/13
     // react bug?
-    if (e.relatedTarget && !e.relatedTarget.setTimeout && _this4._component && _this4._component.getPopupDomNode && Object(__WEBPACK_IMPORTED_MODULE_8_rc_util_es_Dom_contains__["a" /* default */])(_this4._component.getPopupDomNode(), e.relatedTarget)) {
+    if (e.relatedTarget && !e.relatedTarget.setTimeout && _this5._component && _this5._component.getPopupDomNode && Object(__WEBPACK_IMPORTED_MODULE_7_rc_util_es_Dom_contains__["a" /* default */])(_this5._component.getPopupDomNode(), e.relatedTarget)) {
       return;
     }
-    _this4.delaySetPopupVisible(false, _this4.props.blurDelay);
-  };
-
-  this.onMouseDown = function (e) {
-    _this4.fireEvents('onMouseDown', e);
-    _this4.preClickTime = Date.now();
-  };
-
-  this.onTouchStart = function (e) {
-    _this4.fireEvents('onTouchStart', e);
-    _this4.preTouchTime = Date.now();
+    _this5.delaySetPopupVisible(false, _this5.props.blurDelay);
   };
 
   this.onContextMenu = function (e) {
     e.preventDefault();
-    _this4.fireEvents('onContextMenu', e);
-    _this4.setPopupVisible(true, e);
+    _this5.fireEvents('onContextMenu', e);
+    _this5.setPopupVisible(true, e);
   };
 
   this.onContextMenuClose = function () {
-    if (_this4.isContextMenuToShow()) {
-      _this4.close();
+    if (_this5.isContextMenuToShow()) {
+      _this5.close();
     }
   };
 
   this.onClick = function (event) {
-    _this4.fireEvents('onClick', event);
+    _this5.fireEvents('onClick', event);
     // focus will trigger click
-    if (_this4.focusTime) {
+    if (_this5.focusTime) {
       var preTime = void 0;
-      if (_this4.preClickTime && _this4.preTouchTime) {
-        preTime = Math.min(_this4.preClickTime, _this4.preTouchTime);
-      } else if (_this4.preClickTime) {
-        preTime = _this4.preClickTime;
-      } else if (_this4.preTouchTime) {
-        preTime = _this4.preTouchTime;
+      if (_this5.preClickTime && _this5.preTouchTime) {
+        preTime = Math.min(_this5.preClickTime, _this5.preTouchTime);
+      } else if (_this5.preClickTime) {
+        preTime = _this5.preClickTime;
+      } else if (_this5.preTouchTime) {
+        preTime = _this5.preTouchTime;
       }
-      if (Math.abs(preTime - _this4.focusTime) < 20) {
+      if (Math.abs(preTime - _this5.focusTime) < 20) {
         return;
       }
-      _this4.focusTime = 0;
+      _this5.focusTime = 0;
     }
-    _this4.preClickTime = 0;
-    _this4.preTouchTime = 0;
-
-    // Only prevent default when all the action is click.
-    // https://github.com/ant-design/ant-design/issues/17043
-    // https://github.com/ant-design/ant-design/issues/17291
-    if (_this4.isClickToShow() && (_this4.isClickToHide() || _this4.isBlurToHide()) && event && event.preventDefault) {
+    _this5.preClickTime = 0;
+    _this5.preTouchTime = 0;
+    if (event && event.preventDefault) {
       event.preventDefault();
     }
-    var nextVisible = !_this4.state.popupVisible;
-    if (_this4.isClickToHide() && !nextVisible || nextVisible && _this4.isClickToShow()) {
-      _this4.setPopupVisible(!_this4.state.popupVisible, event);
+    var nextVisible = !_this5.state.popupVisible;
+    if (_this5.isClickToHide() && !nextVisible || nextVisible && _this5.isClickToShow()) {
+      _this5.setPopupVisible(!_this5.state.popupVisible, event);
     }
   };
 
   this.onPopupMouseDown = function () {
-    var _context$rcTrigger = _this4.context.rcTrigger,
+    var _context$rcTrigger = _this5.context.rcTrigger,
         rcTrigger = _context$rcTrigger === undefined ? {} : _context$rcTrigger;
 
-    _this4.hasPopupMouseDown = true;
+    _this5.hasPopupMouseDown = true;
 
-    clearTimeout(_this4.mouseDownTimeout);
-    _this4.mouseDownTimeout = setTimeout(function () {
-      _this4.hasPopupMouseDown = false;
+    clearTimeout(_this5.mouseDownTimeout);
+    _this5.mouseDownTimeout = setTimeout(function () {
+      _this5.hasPopupMouseDown = false;
     }, 0);
 
     if (rcTrigger.onPopupMouseDown) {
@@ -34919,24 +34920,24 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.onDocumentClick = function (event) {
-    if (_this4.props.mask && !_this4.props.maskClosable) {
+    if (_this5.props.mask && !_this5.props.maskClosable) {
       return;
     }
 
     var target = event.target;
-    var root = Object(__WEBPACK_IMPORTED_MODULE_6_react_dom__["findDOMNode"])(_this4);
-    if (!Object(__WEBPACK_IMPORTED_MODULE_8_rc_util_es_Dom_contains__["a" /* default */])(root, target) && !_this4.hasPopupMouseDown) {
-      _this4.close();
+    var root = Object(__WEBPACK_IMPORTED_MODULE_6_react_dom__["findDOMNode"])(_this5);
+    if (!Object(__WEBPACK_IMPORTED_MODULE_7_rc_util_es_Dom_contains__["a" /* default */])(root, target) && !_this5.hasPopupMouseDown) {
+      _this5.close();
     }
   };
 
   this.getRootDomNode = function () {
-    return Object(__WEBPACK_IMPORTED_MODULE_6_react_dom__["findDOMNode"])(_this4);
+    return Object(__WEBPACK_IMPORTED_MODULE_6_react_dom__["findDOMNode"])(_this5);
   };
 
   this.getPopupClassNameFromAlign = function (align) {
     var className = [];
-    var _props9 = _this4.props,
+    var _props9 = _this5.props,
         popupPlacement = _props9.popupPlacement,
         builtinPlacements = _props9.builtinPlacements,
         prefixCls = _props9.prefixCls,
@@ -34944,7 +34945,7 @@ var _initialiseProps = function _initialiseProps() {
         getPopupClassNameFromAlign = _props9.getPopupClassNameFromAlign;
 
     if (popupPlacement && builtinPlacements) {
-      className.push(Object(__WEBPACK_IMPORTED_MODULE_13__utils__["b" /* getAlignPopupClassName */])(builtinPlacements, prefixCls, align, alignPoint));
+      className.push(Object(__WEBPACK_IMPORTED_MODULE_12__utils__["b" /* getAlignPopupClassName */])(builtinPlacements, prefixCls, align, alignPoint));
     }
     if (getPopupClassNameFromAlign) {
       className.push(getPopupClassNameFromAlign(align));
@@ -34953,7 +34954,7 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.getComponent = function () {
-    var _props10 = _this4.props,
+    var _props10 = _this5.props,
         prefixCls = _props10.prefixCls,
         destroyPopupOnHide = _props10.destroyPopupOnHide,
         popupClassName = _props10.popupClassName,
@@ -34969,34 +34970,33 @@ var _initialiseProps = function _initialiseProps() {
         popup = _props10.popup,
         stretch = _props10.stretch,
         alignPoint = _props10.alignPoint;
-    var _state = _this4.state,
+    var _state = _this5.state,
         popupVisible = _state.popupVisible,
         point = _state.point;
 
 
-    var align = _this4.getPopupAlign();
+    var align = _this5.getPopupAlign();
 
     var mouseProps = {};
-    if (_this4.isMouseEnterToShow()) {
-      mouseProps.onMouseEnter = _this4.onPopupMouseEnter;
+    if (_this5.isMouseEnterToShow()) {
+      mouseProps.onMouseEnter = _this5.onPopupMouseEnter;
     }
-    if (_this4.isMouseLeaveToHide()) {
-      mouseProps.onMouseLeave = _this4.onPopupMouseLeave;
+    if (_this5.isMouseLeaveToHide()) {
+      mouseProps.onMouseLeave = _this5.onPopupMouseLeave;
     }
 
-    mouseProps.onMouseDown = _this4.onPopupMouseDown;
-    mouseProps.onTouchStart = _this4.onPopupMouseDown;
+    mouseProps.onMouseDown = _this5.onPopupMouseDown;
 
     var focusProps = {};
-    if (_this4.isFocusToShow()) {
-      focusProps.onFocus = _this4.onPopupFocus;
+    if (_this5.isFocusToShow()) {
+      focusProps.onFocus = _this5.onPopupFocus;
     }
-    if (_this4.isBlurToHide) {
-      focusProps.onBlur = _this4.onPopupBlur;
+    if (_this5.isBlurToHide) {
+      focusProps.onBlur = _this5.onPopupBlur;
     }
 
     return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
-      __WEBPACK_IMPORTED_MODULE_14__Popup__["a" /* default */],
+      __WEBPACK_IMPORTED_MODULE_13__Popup__["a" /* default */],
       __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({
         prefixCls: prefixCls,
         destroyPopupOnHide: destroyPopupOnHide,
@@ -35007,24 +35007,24 @@ var _initialiseProps = function _initialiseProps() {
         align: align,
         onAlign: onPopupAlign,
         animation: popupAnimation,
-        getClassNameFromAlign: _this4.getPopupClassNameFromAlign
+        getClassNameFromAlign: _this5.getPopupClassNameFromAlign
       }, mouseProps, focusProps, {
         stretch: stretch,
-        getRootDomNode: _this4.getRootDomNode,
+        getRootDomNode: _this5.getRootDomNode,
         style: popupStyle,
         mask: mask,
         zIndex: zIndex,
         transitionName: popupTransitionName,
         maskAnimation: maskAnimation,
         maskTransitionName: maskTransitionName,
-        ref: _this4.savePopup
+        ref: _this5.savePopup
       }),
       typeof popup === 'function' ? popup() : popup
     );
   };
 
   this.getContainer = function () {
-    var props = _this4.props;
+    var props = _this5.props;
 
     var popupContainer = document.createElement('div');
     // Make sure default popup container will never cause scrollbar appearing
@@ -35033,17 +35033,17 @@ var _initialiseProps = function _initialiseProps() {
     popupContainer.style.top = '0';
     popupContainer.style.left = '0';
     popupContainer.style.width = '100%';
-    var mountNode = props.getPopupContainer ? props.getPopupContainer(Object(__WEBPACK_IMPORTED_MODULE_6_react_dom__["findDOMNode"])(_this4)) : props.getDocument().body;
+    var mountNode = props.getPopupContainer ? props.getPopupContainer(Object(__WEBPACK_IMPORTED_MODULE_6_react_dom__["findDOMNode"])(_this5)) : props.getDocument().body;
     mountNode.appendChild(popupContainer);
     return popupContainer;
   };
 
   this.setPoint = function (point) {
-    var alignPoint = _this4.props.alignPoint;
+    var alignPoint = _this5.props.alignPoint;
 
     if (!alignPoint || !point) return;
 
-    _this4.setState({
+    _this5.setState({
       point: {
         pageX: point.pageX,
         pageY: point.pageY
@@ -35052,17 +35052,15 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.handlePortalUpdate = function () {
-    if (_this4.state.prevPopupVisible !== _this4.state.popupVisible) {
-      _this4.props.afterPopupVisibleChange(_this4.state.popupVisible);
+    if (_this5.prevPopupVisible !== _this5.state.popupVisible) {
+      _this5.props.afterPopupVisibleChange(_this5.state.popupVisible);
     }
   };
 
   this.savePopup = function (node) {
-    _this4._component = node;
+    _this5._component = node;
   };
 };
-
-Object(__WEBPACK_IMPORTED_MODULE_7_react_lifecycles_compat__["a" /* polyfill */])(Trigger);
 
 /* harmony default export */ __webpack_exports__["a"] = (Trigger);
 
@@ -36073,172 +36071,6 @@ module.exports = function() {
 
 /***/ }),
 /* 117 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return polyfill; });
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-function componentWillMount() {
-  // Call this.constructor.gDSFP to support sub-classes.
-  var state = this.constructor.getDerivedStateFromProps(this.props, this.state);
-  if (state !== null && state !== undefined) {
-    this.setState(state);
-  }
-}
-
-function componentWillReceiveProps(nextProps) {
-  // Call this.constructor.gDSFP to support sub-classes.
-  // Use the setState() updater to ensure state isn't stale in certain edge cases.
-  function updater(prevState) {
-    var state = this.constructor.getDerivedStateFromProps(nextProps, prevState);
-    return state !== null && state !== undefined ? state : null;
-  }
-  // Binding "this" is important for shallow renderer support.
-  this.setState(updater.bind(this));
-}
-
-function componentWillUpdate(nextProps, nextState) {
-  try {
-    var prevProps = this.props;
-    var prevState = this.state;
-    this.props = nextProps;
-    this.state = nextState;
-    this.__reactInternalSnapshotFlag = true;
-    this.__reactInternalSnapshot = this.getSnapshotBeforeUpdate(
-      prevProps,
-      prevState
-    );
-  } finally {
-    this.props = prevProps;
-    this.state = prevState;
-  }
-}
-
-// React may warn about cWM/cWRP/cWU methods being deprecated.
-// Add a flag to suppress these warnings for this special case.
-componentWillMount.__suppressDeprecationWarning = true;
-componentWillReceiveProps.__suppressDeprecationWarning = true;
-componentWillUpdate.__suppressDeprecationWarning = true;
-
-function polyfill(Component) {
-  var prototype = Component.prototype;
-
-  if (!prototype || !prototype.isReactComponent) {
-    throw new Error('Can only polyfill class components');
-  }
-
-  if (
-    typeof Component.getDerivedStateFromProps !== 'function' &&
-    typeof prototype.getSnapshotBeforeUpdate !== 'function'
-  ) {
-    return Component;
-  }
-
-  // If new component APIs are defined, "unsafe" lifecycles won't be called.
-  // Error if any of these lifecycles are present,
-  // Because they would work differently between older and newer (16.3+) versions of React.
-  var foundWillMountName = null;
-  var foundWillReceivePropsName = null;
-  var foundWillUpdateName = null;
-  if (typeof prototype.componentWillMount === 'function') {
-    foundWillMountName = 'componentWillMount';
-  } else if (typeof prototype.UNSAFE_componentWillMount === 'function') {
-    foundWillMountName = 'UNSAFE_componentWillMount';
-  }
-  if (typeof prototype.componentWillReceiveProps === 'function') {
-    foundWillReceivePropsName = 'componentWillReceiveProps';
-  } else if (typeof prototype.UNSAFE_componentWillReceiveProps === 'function') {
-    foundWillReceivePropsName = 'UNSAFE_componentWillReceiveProps';
-  }
-  if (typeof prototype.componentWillUpdate === 'function') {
-    foundWillUpdateName = 'componentWillUpdate';
-  } else if (typeof prototype.UNSAFE_componentWillUpdate === 'function') {
-    foundWillUpdateName = 'UNSAFE_componentWillUpdate';
-  }
-  if (
-    foundWillMountName !== null ||
-    foundWillReceivePropsName !== null ||
-    foundWillUpdateName !== null
-  ) {
-    var componentName = Component.displayName || Component.name;
-    var newApiName =
-      typeof Component.getDerivedStateFromProps === 'function'
-        ? 'getDerivedStateFromProps()'
-        : 'getSnapshotBeforeUpdate()';
-
-    throw Error(
-      'Unsafe legacy lifecycles will not be called for components using new component APIs.\n\n' +
-        componentName +
-        ' uses ' +
-        newApiName +
-        ' but also contains the following legacy lifecycles:' +
-        (foundWillMountName !== null ? '\n  ' + foundWillMountName : '') +
-        (foundWillReceivePropsName !== null
-          ? '\n  ' + foundWillReceivePropsName
-          : '') +
-        (foundWillUpdateName !== null ? '\n  ' + foundWillUpdateName : '') +
-        '\n\nThe above lifecycles should be removed. Learn more about this warning here:\n' +
-        'https://fb.me/react-async-component-lifecycle-hooks'
-    );
-  }
-
-  // React <= 16.2 does not support static getDerivedStateFromProps.
-  // As a workaround, use cWM and cWRP to invoke the new static lifecycle.
-  // Newer versions of React will ignore these lifecycles if gDSFP exists.
-  if (typeof Component.getDerivedStateFromProps === 'function') {
-    prototype.componentWillMount = componentWillMount;
-    prototype.componentWillReceiveProps = componentWillReceiveProps;
-  }
-
-  // React <= 16.2 does not support getSnapshotBeforeUpdate.
-  // As a workaround, use cWU to invoke the new lifecycle.
-  // Newer versions of React will ignore that lifecycle if gSBU exists.
-  if (typeof prototype.getSnapshotBeforeUpdate === 'function') {
-    if (typeof prototype.componentDidUpdate !== 'function') {
-      throw new Error(
-        'Cannot polyfill getSnapshotBeforeUpdate() for components that do not define componentDidUpdate() on the prototype'
-      );
-    }
-
-    prototype.componentWillUpdate = componentWillUpdate;
-
-    var componentDidUpdate = prototype.componentDidUpdate;
-
-    prototype.componentDidUpdate = function componentDidUpdatePolyfill(
-      prevProps,
-      prevState,
-      maybeSnapshot
-    ) {
-      // 16.3+ will not execute our will-update method;
-      // It will pass a snapshot value to did-update though.
-      // Older versions will require our polyfilled will-update value.
-      // We need to handle both cases, but can't just check for the presence of "maybeSnapshot",
-      // Because for <= 15.x versions this might be a "prevContext" object.
-      // We also can't just check "__reactInternalSnapshot",
-      // Because get-snapshot might return a falsy value.
-      // So check for the explicit __reactInternalSnapshotFlag flag to determine behavior.
-      var snapshot = this.__reactInternalSnapshotFlag
-        ? this.__reactInternalSnapshot
-        : maybeSnapshot;
-
-      componentDidUpdate.call(this, prevProps, prevState, snapshot);
-    };
-  }
-
-  return Component;
-}
-
-
-
-
-/***/ }),
-/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36251,7 +36083,7 @@ exports['default'] = addEventListener;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _EventObject = __webpack_require__(119);
+var _EventObject = __webpack_require__(118);
 
 var _EventObject2 = _interopRequireDefault(_EventObject);
 
@@ -36295,7 +36127,7 @@ function addEventListener(target, eventType, callback, option) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 119 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36313,7 +36145,7 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _EventBaseObject = __webpack_require__(120);
+var _EventBaseObject = __webpack_require__(119);
 
 var _EventBaseObject2 = _interopRequireDefault(_EventBaseObject);
 
@@ -36579,7 +36411,7 @@ exports['default'] = DomEventObject;
 module.exports = exports['default'];
 
 /***/ }),
-/* 120 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36648,7 +36480,7 @@ exports["default"] = EventBaseObject;
 module.exports = exports["default"];
 
 /***/ }),
-/* 121 */
+/* 120 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -36785,7 +36617,7 @@ ContainerRender.defaultProps = {
 
 
 /***/ }),
-/* 122 */
+/* 121 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -36883,7 +36715,7 @@ Portal.propTypes = {
 
 
 /***/ }),
-/* 123 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -36942,7 +36774,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 124 */
+/* 123 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -36960,9 +36792,9 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react_dom__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rc_align__ = __webpack_require__(125);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rc_animate__ = __webpack_require__(131);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__PopupInner__ = __webpack_require__(139);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rc_align__ = __webpack_require__(124);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rc_animate__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__PopupInner__ = __webpack_require__(138);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__LazyRenderBox__ = __webpack_require__(63);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__utils__ = __webpack_require__(59);
 
@@ -37063,7 +36895,6 @@ var Popup = function (_Component) {
         onMouseEnter = _props.onMouseEnter,
         onMouseLeave = _props.onMouseLeave,
         onMouseDown = _props.onMouseDown,
-        onTouchStart = _props.onTouchStart,
         onFocus = _props.onFocus,
         onBlur = _props.onBlur;
 
@@ -37108,7 +36939,6 @@ var Popup = function (_Component) {
       onMouseEnter: onMouseEnter,
       onMouseLeave: onMouseLeave,
       onMouseDown: onMouseDown,
-      onTouchStart: onTouchStart,
       onFocus: onFocus,
       onBlur: onBlur,
       style: newStyle
@@ -37239,7 +37069,6 @@ Popup.propTypes = {
   onMouseEnter: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.func,
   onMouseLeave: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.func,
   onMouseDown: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.func,
-  onTouchStart: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.func,
   onFocus: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.func,
   onBlur: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.func,
   stretch: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.string,
@@ -37315,18 +37144,18 @@ var _initialiseProps = function _initialiseProps() {
 /* harmony default export */ __webpack_exports__["a"] = (Popup);
 
 /***/ }),
-/* 125 */
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Align__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Align__ = __webpack_require__(125);
 // export this package's api
 
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__Align__["a" /* default */]);
 
 /***/ }),
-/* 126 */
+/* 125 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -37344,9 +37173,9 @@ var _initialiseProps = function _initialiseProps() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react_dom__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_dom_align__ = __webpack_require__(129);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_dom_align__ = __webpack_require__(128);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rc_util_es_Dom_addEventListener__ = __webpack_require__(58);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__util__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__util__ = __webpack_require__(129);
 
 
 
@@ -37550,10 +37379,10 @@ Align.defaultProps = {
 /* harmony default export */ __webpack_exports__["a"] = (Align);
 
 /***/ }),
-/* 127 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(128);
+__webpack_require__(127);
 var $Object = __webpack_require__(8).Object;
 module.exports = function defineProperty(it, key, desc) {
   return $Object.defineProperty(it, key, desc);
@@ -37561,7 +37390,7 @@ module.exports = function defineProperty(it, key, desc) {
 
 
 /***/ }),
-/* 128 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(12);
@@ -37570,7 +37399,7 @@ $export($export.S + $export.F * !__webpack_require__(9), 'Object', { definePrope
 
 
 /***/ }),
-/* 129 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38899,7 +38728,7 @@ function alignPoint(el, tgtPoint, align) {
 
 
 /***/ }),
-/* 130 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38964,13 +38793,13 @@ function restoreFocus(activeElement, container) {
 }
 
 /***/ }),
-/* 131 */
+/* 130 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__ = __webpack_require__(131);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_classCallCheck__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_classCallCheck__);
@@ -38984,9 +38813,9 @@ function restoreFocus(activeElement, container) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_prop_types__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rc_util_es_unsafeLifecyclesPolyfill__ = __webpack_require__(133);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ChildrenUtils__ = __webpack_require__(134);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__AnimateChild__ = __webpack_require__(135);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rc_util_es_unsafeLifecyclesPolyfill__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ChildrenUtils__ = __webpack_require__(133);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__AnimateChild__ = __webpack_require__(134);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__util_animate__ = __webpack_require__(62);
 
 
@@ -39344,7 +39173,7 @@ var _initialiseProps = function _initialiseProps() {
 /* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_8_rc_util_es_unsafeLifecyclesPolyfill__["a" /* default */])(Animate));
 
 /***/ }),
-/* 132 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39374,7 +39203,7 @@ exports.default = function (obj, key, value) {
 };
 
 /***/ }),
-/* 133 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39409,7 +39238,7 @@ var unsafeLifecyclesPolyfill = function unsafeLifecyclesPolyfill(Component) {
 /* harmony default export */ __webpack_exports__["a"] = (unsafeLifecyclesPolyfill);
 
 /***/ }),
-/* 134 */
+/* 133 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39524,7 +39353,7 @@ function mergeChildren(prev, next) {
 }
 
 /***/ }),
-/* 135 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39542,7 +39371,7 @@ function mergeChildren(prev, next) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_react_dom__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_prop_types__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_css_animation__ = __webpack_require__(136);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_css_animation__ = __webpack_require__(135);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__util_animate__ = __webpack_require__(62);
 
 
@@ -39659,15 +39488,15 @@ AnimateChild.propTypes = {
 /* harmony default export */ __webpack_exports__["a"] = (AnimateChild);
 
 /***/ }),
-/* 136 */
+/* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return isCssAnimationSupported; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Event__ = __webpack_require__(137);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_component_classes__ = __webpack_require__(138);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Event__ = __webpack_require__(136);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_component_classes__ = __webpack_require__(137);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_component_classes___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_component_classes__);
 
 
@@ -39846,7 +39675,7 @@ cssAnimation.isCssAnimationSupported = isCssAnimationSupported;
 /* harmony default export */ __webpack_exports__["a"] = (cssAnimation);
 
 /***/ }),
-/* 137 */
+/* 136 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39981,7 +39810,7 @@ var TransitionEvents = {
 /* harmony default export */ __webpack_exports__["a"] = (TransitionEvents);
 
 /***/ }),
-/* 138 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -40178,7 +40007,7 @@ ClassList.prototype.contains = function(name){
 
 
 /***/ }),
-/* 139 */
+/* 138 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40222,7 +40051,6 @@ var PopupInner = function (_Component) {
         onMouseEnter: props.onMouseEnter,
         onMouseLeave: props.onMouseLeave,
         onMouseDown: props.onMouseDown,
-        onTouchStart: props.onTouchStart,
         onFocus: props.onFocus,
         onBlur: props.onBlur,
         style: props.style
@@ -40245,7 +40073,6 @@ PopupInner.propTypes = {
   onMouseEnter: __WEBPACK_IMPORTED_MODULE_4_prop_types___default.a.func,
   onMouseLeave: __WEBPACK_IMPORTED_MODULE_4_prop_types___default.a.func,
   onMouseDown: __WEBPACK_IMPORTED_MODULE_4_prop_types___default.a.func,
-  onTouchStart: __WEBPACK_IMPORTED_MODULE_4_prop_types___default.a.func,
   onFocus: __WEBPACK_IMPORTED_MODULE_4_prop_types___default.a.func,
   onBlur: __WEBPACK_IMPORTED_MODULE_4_prop_types___default.a.func,
   children: __WEBPACK_IMPORTED_MODULE_4_prop_types___default.a.any
@@ -40255,7 +40082,7 @@ PopupInner.propTypes = {
 /* harmony default export */ __webpack_exports__["a"] = (PopupInner);
 
 /***/ }),
-/* 140 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
