@@ -651,6 +651,9 @@ export default class Trigger extends React.Component {
     if (this.isFocusToShow() || this.isBlurToHide()) {
       newChildProps.onFocus = this.onFocus;
       newChildProps.onBlur = this.onBlur;
+    } else {
+      // newChildProps.onFocus = this.createTwoChains('onFocus');
+      newChildProps.onBlur = this.createTwoChains('onBlur');
     }
 
     const childrenClassName = classNames(child && child.props && child.props.className, className);
