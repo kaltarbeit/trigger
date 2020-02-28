@@ -269,10 +269,12 @@ export default class Trigger extends React.Component {
   }
 
   onPopupFocus = () => {
+    console.log('onPopupFocus');
     this.clearDelayTimer();
   };
 
   onPopupBlur = e => {
+    console.log('onPopupBlur');
     // https://github.com/react-component/trigger/pull/13
     // react bug?
     console.log(e,
@@ -416,12 +418,8 @@ export default class Trigger extends React.Component {
     mouseProps.onMouseDown = this.onPopupMouseDown;
 
     const focusProps = {};
-    if (this.isFocusToShow()) {
-      focusProps.onFocus = this.onPopupFocus;
-    }
-    if (this.isBlurToHide) {
-      focusProps.onBlur = this.onPopupBlur;
-    }
+    focusProps.onFocus = this.onPopupFocus;
+    focusProps.onBlur = this.onPopupBlur;
 
     return (
       <Popup
@@ -655,10 +653,9 @@ export default class Trigger extends React.Component {
     }
     if (this.isFocusToShow() || this.isBlurToHide()) {
       newChildProps.onFocus = this.onFocus;
-      newChildProps.onBlur = this.onBlur;
     } else {
-      // newChildProps.onFocus = this.createTwoChains('onFocus');
-      newChildProps.onBlur = this.createTwoChains('onBlur');
+      newChildProps.onFocus = this.createTwoChains('onFocus');
+      newChildProps.onBlur = this.onBlur;
     }
 
     const childrenClassName = classNames(child && child.props && child.props.className, className);
