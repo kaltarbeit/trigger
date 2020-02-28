@@ -47,7 +47,7 @@ function preventDefault(e) {
 }
 
 function getPopupContainer(trigger) {
-  return trigger.parentNode;
+  return trigger;
 }
 
 class Test extends React.Component {
@@ -56,7 +56,7 @@ class Test extends React.Component {
     maskClosable: false,
     placement: 'right',
     trigger: {
-      hover: 1,
+      focus: 1,
     },
     offsetX: undefined,
     offsetY: undefined,
@@ -292,7 +292,10 @@ class Test extends React.Component {
           }}
           popup={
             <div>
-              i am a popup
+              <a href="/">i am a popup</a><br/>
+              <a href="/">i am a popup</a><br/>
+              <a href="/">i am a popup</a><br/>
+              <a href="/">i am a popup</a><br/>
             </div>
           }
           popupTransitionName={state.transitionName}

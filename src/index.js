@@ -265,19 +265,20 @@ export default class Trigger extends React.Component {
     console.log('onBlur');
     this.fireEvents('onBlur', e);
     this.clearDelayTimer();
-    if (this.isBlurToHide()) {
-      this.delaySetPopupVisible(false, this.props.blurDelay);
-    }
+    this.delaySetPopupVisible(false, this.props.blurDelay);
   }
 
   onPopupFocus = () => {
-    console.log('onPopupFocus');
     this.clearDelayTimer();
   };
 
   onPopupBlur = e => {
     // https://github.com/react-component/trigger/pull/13
     // react bug?
+    console.log(e,
+      this._component.getPopupDomNode(),
+      contains(this._component.getPopupDomNode(), e.relatedTarget));
+
     if (
       e.relatedTarget &&
       !e.relatedTarget.setTimeout &&
@@ -287,7 +288,6 @@ export default class Trigger extends React.Component {
     ) {
       return;
     }
-    console.log('onPopupBlur');
     this.clearDelayTimer();
     this.delaySetPopupVisible(false, this.props.blurDelay);
   };
