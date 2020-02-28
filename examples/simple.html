@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple.js - example - rc-trigger@2.6.2-ksd.6</title>
+  <title>simple.js - example - rc-trigger@2.6.2-ksd.7</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rc-trigger@2.6.2-ksd.6</h1>
+      <h1>rc-trigger@2.6.2-ksd.7</h1>
 
       <p>base abstract trigger component for react</p>
     </div>
@@ -318,7 +318,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 }
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getPopupContainer</span>(<span class="hljs-params">trigger</span>) </span>{
-  <span class="hljs-keyword">return</span> trigger.parentNode;
+  <span class="hljs-keyword">return</span> trigger;
 }
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
@@ -327,7 +327,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     maskClosable: <span class="hljs-literal">false</span>,
     placement: <span class="hljs-string">'right'</span>,
     trigger: {
-      hover: <span class="hljs-number">1</span>,
+      focus: <span class="hljs-number">1</span>,
     },
     offsetX: <span class="hljs-literal">undefined</span>,
     offsetY: <span class="hljs-literal">undefined</span>,
@@ -563,7 +563,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
           }}
           <span class="hljs-attribute">popup</span>=<span class="hljs-value">{</span>
             &lt;<span class="hljs-attribute">div</span>&gt;</span>
-              i am a popup
+              <span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"/"</span>&gt;</span>i am a popup<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">br</span>/&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"/"</span>&gt;</span>i am a popup<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">br</span>/&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"/"</span>&gt;</span>i am a popup<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">br</span>/&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"/"</span>&gt;</span>i am a popup<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">br</span>/&gt;</span>
             <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           }
           popupTransitionName={state.transitionName}
