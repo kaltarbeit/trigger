@@ -404,28 +404,27 @@ var Test = function (_React$Component) {
               null,
               __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
                 'a',
-                { href: '/' },
+                { href: '#none' },
                 'i am a popup'
               ),
               __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement('br', null),
               __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
                 'a',
-                { href: '/' },
+                { href: '#none' },
                 'i am a popup'
               ),
               __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement('br', null),
               __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
                 'a',
-                { href: '/' },
+                { href: '#none' },
                 'i am a popup'
               ),
               __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement('br', null),
               __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
-                'a',
-                { href: '/' },
+                'span',
+                null,
                 'i am a popup'
-              ),
-              __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement('br', null)
+              )
             ),
             popupTransitionName: state.transitionName
           },
