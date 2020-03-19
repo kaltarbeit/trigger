@@ -292,10 +292,10 @@ class Test extends React.Component {
           }}
           popup={
             <div>
-              <a href="/">i am a popup</a><br/>
-              <a href="/">i am a popup</a><br/>
-              <a href="/">i am a popup</a><br/>
-              <a href="/">i am a popup</a><br/>
+              <a href="#none">i am a popup</a><br/>
+              <a href="#none">i am a popup</a><br/>
+              <a href="#none">i am a popup</a><br/>
+              <span>i am a popup</span>
             </div>
           }
           popupTransitionName={state.transitionName}

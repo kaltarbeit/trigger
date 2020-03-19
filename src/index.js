@@ -241,7 +241,6 @@ export default class Trigger extends React.Component {
   }
 
   onFocus = (e) => {
-    console.log('onFocus');
     this.fireEvents('onFocus', e);
     // incase focusin and focusout
     this.clearDelayTimer();
@@ -258,28 +257,23 @@ export default class Trigger extends React.Component {
 
   onTouchStart = (e) => {
     this.fireEvents('onTouchStart', e);
+    this.clearDelayTimer();
     this.preTouchTime = Date.now();
   }
 
   onBlur = (e) => {
-    console.log('onBlur');
     this.fireEvents('onBlur', e);
     this.clearDelayTimer();
-    this.delaySetPopupVisible(false, this.props.blurDelay);
+    // this.delaySetPopupVisible(false, this.props.blurDelay);
   }
 
   onPopupFocus = () => {
-    console.log('onPopupFocus');
     this.clearDelayTimer();
   };
 
   onPopupBlur = e => {
-    console.log('onPopupBlur');
     // https://github.com/react-component/trigger/pull/13
     // react bug?
-    console.log(e,
-      this._component.getPopupDomNode(),
-      contains(this._component.getPopupDomNode(), e.relatedTarget));
 
     if (
       e.relatedTarget &&
@@ -355,7 +349,9 @@ export default class Trigger extends React.Component {
 
     const target = event.target;
     const root = findDOMNode(this);
-    if (!contains(root, target) && !this.hasPopupMouseDown) {
+
+    if (!contains(root, target)
+      && !contains(this._component.getPopupDomNode(), target) && !this.hasPopupMouseDown) {
       this.close();
     }
   }
@@ -419,6 +415,7 @@ export default class Trigger extends React.Component {
 
     const focusProps = {};
     focusProps.onFocus = this.onPopupFocus;
+    focusProps.onTouchStart = this.onPopupFocus;
     focusProps.onBlur = this.onPopupBlur;
 
     return (
@@ -589,7 +586,7 @@ export default class Trigger extends React.Component {
 
   isBlurToHide() {
     const { action, hideAction } = this.props;
-    return action.indexOf('focus') !== -1 || hideAction.indexOf('blur') !== -1;
+    return action.indexOf('blur') !== -1 || hideAction.indexOf('blur') !== -1;
   }
 
   forcePopupAlign() {
