@@ -34608,7 +34608,7 @@ var Trigger = function (_React$Component) {
         action = _props7.action,
         hideAction = _props7.hideAction;
 
-    return action.indexOf('blur') !== -1 || hideAction.indexOf('blur') !== -1;
+    return action.indexOf('focus') !== -1 || hideAction.indexOf('blur') !== -1;
   };
 
   Trigger.prototype.forcePopupAlign = function forcePopupAlign() {
