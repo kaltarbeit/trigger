@@ -586,7 +586,7 @@ export default class Trigger extends React.Component {
 
   isBlurToHide() {
     const { action, hideAction } = this.props;
-    return action.indexOf('blur') !== -1 || hideAction.indexOf('blur') !== -1;
+    return action.indexOf('focus') !== -1 || hideAction.indexOf('blur') !== -1;
   }
 
   forcePopupAlign() {
